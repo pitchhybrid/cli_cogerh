@@ -1,0 +1,17 @@
+{
+  "name": "cli-cogerh",
+  "version": "1.0.0",
+  "description": "Utilitario interface de projeto",
+  "main": "index.js",
+  "author": "PitchHybrid",
+  "license": "MPL-v2",
+  "private": false,
+  "bin": {
+    "outside": "bin/outside"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.4",
+    "inquirer": "^6.5.1"
+  }
+}

@@ -1,0 +1,1268 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="teste"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="555"
+		 columnSpacing="0"
+		 leftMargin="20"
+		 rightMargin="20"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.zoom" value="1.5" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="522" />
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="numDiariaInicial" isForPrompting="true" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="numDiariaFinal" isForPrompting="true" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nomeEmit" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["nome"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT usu_inclusao.us_dsc_descricao AS usuario_inclusao,
+	   usu_inclusao.us_dsc_login AS login_inclusao,
+	$P{nomeEmit} AS nome_emitente,
+       diaria.dia_num_status AS status,
+       diaria.dia_num_numero AS numero_diaria,
+       diaria.dia_dt_data_inclusao AS dt_inclusao,
+       solic.sol_dsc_nome AS solicitante,
+       categoria.catdir_num_codigo AS codigo_categoria,
+       diaria.dia_dt_data_inicio_previsto AS dt_ini_previsto,
+       diaria.dia_dt_data_fim_previsto AS dt_fim_previsto,
+       diaria.dia_dt_data_inicio_real AS dt_ini_real,
+       diaria.dia_dt_data_fim_real AS dt_fim_real,
+       destino.des_dsc_descricao AS desc_destino,
+       loc_origem.loc_dsc_descricao AS desc_loc_origem,
+       loc_destino.loc_dsc_descricao AS desc_loc_destino,
+       gerencia.ger_dsc_descricao AS desc_gerencia,
+       bacia.bac_dsc_descricao AS desc_bacia,
+       macroprojeto.macroproj_dsc_descricao AS desc_macroprojeto,
+       diaria.dia_dsc_justificativa_solicitacao AS just_solic,
+       diaria.dia_dsc_obs_aprovador_n1 AS just_aprov1,
+       diaria.dia_dsc_obs_aprovador_n2 AS just_aprov2,
+       diaria.dia_dsc_justif_prestacao_conta AS just_prestacao_contas,
+       diaria.dia_num_qtd_diaria AS qtd_diarias,
+       diaria.dia_num_valor_diaria AS vlr_diaria,
+       diaria.dia_num_percentual_acrescimo_local AS percent_acrescimo,
+       diaria.dia_num_valor_acrescimo AS vlr_acrescimo,
+       diaria.dia_num_ajuda_custo AS ajuda_custo,
+       diaria.dia_num_valor_ajuste AS vlr_ajuste,
+       diaria.dia_num_valor_total AS vlr_total_previsto,
+       diaria.dia_num_valor_total_real AS vlr_total_real,
+       diaria.dia_num_valor_devolvido AS vlr_devolvido,
+       aprovador1.us_dsc_descricao AS aprovador_niv1,
+       diaria.dia_dt_data_aprovacao_n1 AS dt_aprovacao_niv1,
+       aprovador2.us_dsc_descricao AS aprovador_niv2,
+       diaria.dia_dt_data_aprovacao_n2 AS dt_aprovacao_niv2
+
+FROM  adm_diarias.t_diaria_dia diaria,
+	  adm_diarias.t_solicitante_sol solic,
+      adm_diarias.t_gerencia_ger gerencia,
+	  adm_diarias.t_localidade_loc loc_origem,
+      adm_diarias.t_localidade_loc loc_destino,
+      adm_diarias.t_destino_des destino ,
+      adm_diarias.t_usuario_sistema_us usu_inclusao,
+	  adm_diarias.t_usuario_sistema_us aprovador1,
+      adm_diarias.t_usuario_sistema_us aprovador2,
+      adm_diarias.t_categoria_diaria_catdir categoria,
+      adm_diarias.t_bacia_bac bacia,
+      adm_diarias.t_macroprojeto_macroproj macroprojeto
+
+
+WHERE diaria.usu_inclusao_cod_id_fk = usu_inclusao.us_cod_id AND
+	  diaria.usu_aprovador_nivel1_cod_id_fk = aprovador1.us_cod_id AND
+      diaria.usu_aprovador_nivel2_cod_id_fk = aprovador2.us_cod_id AND
+      diaria.solic_cod_id_fk = solic.sol_cod_id AND
+      diaria.des_cod_id_fk = destino.des_cod_id AND
+      diaria.loc_origem_cod_id_fk = loc_origem.loc_cod_id AND
+      diaria.loc_destino_cod_id_fk = loc_destino.loc_cod_id AND
+      diaria.ger_cod_id_fk = gerencia.ger_cod_id AND
+      diaria.catdir_cod_id_fk = categoria.catdir_cod_id AND
+      diaria.bac_cod_id_fk = bacia.bac_cod_id AND
+      diaria.macroproj_cod_id_fk = macroprojeto.macroproj_cod_id
+      AND diaria.dia_num_numero >= $P{numDiariaInicial}
+      AND diaria.dia_num_numero <= $P{numDiariaFinal}
+ORDER BY diaria.dia_num_numero]]></queryString>
+
+	<field name="usuarioInclusao" class="java.lang.String"/>
+	<field name="loginInclusao" class="java.lang.String"/>
+	<field name="nomeEmitente" class="java.lang.String"/>
+	<field name="status" class="java.lang.Integer"/>
+	<field name="numeroDiaria" class="java.lang.Integer"/>
+	<field name="dataInclusao" class="java.util.Date"/>
+	<field name="solicitante" class="java.lang.String"/>
+	<field name="codigoCategoria" class="java.lang.Long"/>
+	<field name="dataInicioPrevisto" class="java.util.Date"/>
+	<field name="dataFimPrevisto" class="java.util.Date"/>
+	<field name="dataInicioReal" class="java.util.Date"/>
+	<field name="dataFimReal" class="java.util.Date"/>
+	<field name="descricaoDestino" class="java.lang.String"/>
+	<field name="localidadeOrigem" class="java.lang.String"/>
+	<field name="localidadeDestino" class="java.lang.String"/>
+	<field name="descricaoGerencia" class="java.lang.String"/>
+	<field name="descricaoBacia" class="java.lang.String"/>
+	<field name="descricaoMacroprojeto" class="java.lang.String"/>
+	<field name="justificativaSolicitacao" class="java.lang.String"/>
+	<field name="justificativaAprovacao1" class="java.lang.String"/>
+	<field name="justificativaAprovacao2" class="java.lang.String"/>
+	<field name="justificativaPrestacaoContas" class="java.lang.String"/>
+	<field name="qtdDiarias" class="java.lang.Double"/>
+	<field name="valorDiaria" class="java.lang.Double"/>
+	<field name="percentualAcrescimo" class="java.lang.Double"/>
+	<field name="valorAcrescimo" class="java.lang.Double"/>
+	<field name="ajudaCusto" class="java.lang.Double"/>
+	<field name="valorAjuste" class="java.lang.Double"/>
+	<field name="valorTotalPrevisto" class="java.lang.Double"/>
+	<field name="valorTotalReal" class="java.lang.Double"/>
+	<field name="valorDevolvido" class="java.lang.Double"/>
+	<field name="aprovadorNivel1" class="java.lang.String"/>
+	<field name="dataAprovacaoNivel1" class="java.util.Date"/>
+	<field name="aprovadorNivel2" class="java.lang.String"/>
+	<field name="dataAprovacaoNivel2" class="java.util.Date"/>
+	<field name="descricaoStatusDiaria" class="java.lang.String"/>
+
+	<variable name="status" class="java.lang.String" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[$F{status} == 1 ? "Aguardando aprovação nível 01" : $F{status} == 2 ? "Aguardando aprovação nível 02" : $F{status} == 3 ? "Diária aguardando prestação de contas" : $F{status} == 4 ? "Rejeitada" : $F{status} == 5 ? "Encerrada (não realizada)" : $F{status} == 6 ? "Encerrada (realizada)" : "erro"]]></variableExpression>
+	</variable>
+	<variable name="data" class="java.util.Date" resetType="Report" calculation="Nothing">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="428"
+						y="0"
+						width="117"
+						height="16"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="212"
+						y="0"
+						width="144"
+						height="16"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="SansSerif" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[EMISSÃO DE DIÁRIAS]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="779"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="41"
+						width="285"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{usuarioInclusao}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="23"
+						y="41"
+						width="136"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[RESPONSÁVEL INCLUSÃO:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="6"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="26"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="212"
+						y="7"
+						width="144"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[INFORMAÇÕES DA DIÁRIA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="61"
+						width="100"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[EMITENTE:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="61"
+						width="285"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{nomeEmit}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="23"
+						y="81"
+						width="100"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[STATUS DA DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="101"
+						width="112"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[NÚMERO DA DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="121"
+						width="145"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[DATA DE INCLUSÃO DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="141"
+						width="100"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[SOLICITANTE:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="181"
+						width="125"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[DATA INÍCIO PREVISTA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="161"
+						width="100"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[NÍVEL DA DIÁRIA:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="101"
+						width="100"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{numeroDiaria}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="121"
+						width="100"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataInclusao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="141"
+						width="287"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{solicitante}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="161"
+						width="100"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{codigoCategoria}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="181"
+						width="100"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataInicioPrevisto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="321"
+						y="181"
+						width="122"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[DATA FINAL PREVISTA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="201"
+						width="100"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[DATA INÍCIO REAL:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="343"
+						y="201"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[DATA FINAL REAL:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="241"
+						width="107"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[MUNICÍPIO ORIGEM:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="261"
+						width="109"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[MUNICÍPIO DESTINO:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="201"
+						width="100"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataInicioReal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="455"
+						y="181"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataFimPrevisto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="455"
+						y="201"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataFimReal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="23"
+						y="221"
+						width="100"
+						height="20"
+						key="staticText"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[CLASSE DESTINO:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="221"
+						width="135"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoDestino}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="241"
+						width="135"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{localidadeOrigem}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="261"
+						width="135"
+						height="20"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{localidadeDestino}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="284"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="302"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="212"
+						y="286"
+						width="144"
+						height="15"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[DADOS CONTÁBEIS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="312"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[GERÊNCIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="332"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[BACIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="352"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[MACRO PROJETO:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="375"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="392"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="212"
+						y="376"
+						width="144"
+						height="17"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[OBSERVAÇÕES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="432"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[APROVAÇÃO 1:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="401"
+						width="100"
+						height="31"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[INCLUSÃO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="472"
+						width="100"
+						height="31"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[PREST. CONTAS:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="452"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[APROVAÇÃO 2:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="511"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="529"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="212"
+						y="512"
+						width="144"
+						height="18"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[VALORES DA DIÁRIA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="537"
+						width="133"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[QUANTIDADE DE DIÁRIAS:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="557"
+						width="147"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[VALOR UNITÁRIO DA DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="637"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[VALOR DE AJUSTE:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="577"
+						width="155"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[% DE ACRÉSCIMO DA DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="597"
+						width="124"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[VALOR DO ACRESCIMO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="617"
+						width="100"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[AJUDA DE CUSTO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="657"
+						width="155"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[TOTAL PREVISTO DA DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="677"
+						width="123"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[TOTAL REAL DA DIÁRIA:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="697"
+						width="130"
+						height="20"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[VALOR DA DEVOLUÇÃO:]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="720"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="737"
+						width="555"
+						height="1"
+						key="line"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="212"
+						y="721"
+						width="144"
+						height="17"
+						key="staticText"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[APROVADOR DA DIÁRIA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="744"
+						width="145"
+						height="18"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[NOME DO APROVADOR - 01:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="23"
+						y="761"
+						width="145"
+						height="18"
+						key="staticText"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+				<text><![CDATA[NOME DO APROVADOR - 02:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="312"
+						width="287"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoGerencia}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="332"
+						width="287"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoBacia}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="352"
+						width="287"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoMacroprojeto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="168"
+						y="401"
+						width="387"
+						height="31"
+						key="textField"
+						positionType="Float"
+						isPrintWhenDetailOverflows="true"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{justificativaSolicitacao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="432"
+						width="377"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{justificativaAprovacao1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="452"
+						width="377"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{justificativaAprovacao2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="472"
+						width="387"
+						height="39"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{justificativaPrestacaoContas}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,#0.0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="537"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{qtdDiarias}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="557"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{valorDiaria}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="577"
+						width="127"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{percentualAcrescimo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="597"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{valorAcrescimo}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="617"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ajudaCusto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="637"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{valorAjuste}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="657"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{valorTotalPrevisto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="677"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{valorTotalReal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="697"
+						width="100"
+						height="20"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{valorDevolvido}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="744"
+						width="206"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aprovadorNivel1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="190"
+						y="761"
+						width="206"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{aprovadorNivel2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="435"
+						y="744"
+						width="120"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataAprovacaoNivel1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="435"
+						y="762"
+						width="120"
+						height="17"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{dataAprovacaoNivel2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="168"
+						y="80"
+						width="284"
+						height="21"
+						key="textField"
+						stretchType="RelativeToTallestObject"
+						positionType="Float"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricaoStatusDiaria}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

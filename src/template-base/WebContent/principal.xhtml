@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:jsf="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/index.xhtml">
+
+
+	<ui:define name="nome_pagina">
+
+	</ui:define>
+
+	<ui:define name="corpo">
+		<div class="callout callout-info">
+			<h4>Bem vindo!</h4>
+
+			<p>O sistema de Solicitação de Outorgas da Cogerh permite o
+				usuário realizar pedidos para exploração de águas do estado do
+				Ceará.</p>
+		</div>
+
+		<div class="wizard">
+			<div class="wizard-inner">
+				<div class="connecting-line"></div>
+				<ul class="nav nav-tabs" role="tablist">
+
+					<li role="presentation" class="active"><a href="#step1"
+						data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
+							<span class="round-tab"> <i
+								class="glyphicon glyphicon-user"></i>
+								
+						</span>
+					</a></li>
+
+					<li role="presentation" class="disabled"><a href="#step2"
+						data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
+							<span class="round-tab"> <i
+								class="glyphicon glyphicon-th-list"></i>
+						</span>
+					</a></li>
+					<li role="presentation" class="disabled"><a href="#step3"
+						data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
+							<span class="round-tab"> <i
+								class="glyphicon glyphicon-picture"></i>
+						</span>
+					</a></li>
+
+					<li role="presentation" class="disabled">
+					<a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete"> 
+						<span class="round-tab">
+							<i class="glyphicon glyphicon-ok"></i>
+						</span>
+					</a>
+					</li>
+				</ul>
+			</div>
+				<p:commandLink value="atualizar" style="display:none" id="atualizar" update="confirmacao">
+				</p:commandLink>
+			<div class="tab-content">
+
+				<div class="tab-pane active" role="tabpanel" id="step1"
+					style="padding-top: 0px;">
+					<div class="box no-padding">
+						<div class="box-header">
+							<p class="box-title">
+								Progresso <span id="porcentagem">0%</span>
+							</p>
+						</div>
+						<div class="progress progress-xs progress-striped active">
+							<div id="bar" class="progress-bar"></div>
+						</div>
+						<div class="box-body">
+							<div class="box box-primary no-padding">
+								<div class="box-header with-border">
+									<p class="box-title">Dados do Solicitante</p>
+								</div>
+								<div class="box-body">
+									<div class="container">
+										<h:panelGroup layout="block" id="div-nome" class="form-group">
+
+											<div class="col-sm-10">
+												<p:outputLabel for="nome" class="control-label" value="Nome" />
+												<p:inputText id="nome"
+													value="#{solicitanteBean.solicitante.nome}"
+													styleClass="form-control" placeholder="Nome" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+
+											</div>
+										</h:panelGroup>
+										<h:panelGroup layout="block" class="form-group ">
+											<h:panelGroup id="div-cpf">
+												<div class="col-sm-4">
+													<p:outputLabel
+														rendered="#{solicitanteBean.pessoa eq 'FISICA'}"
+														class="control-label" value="CPF" />
+													<p:outputLabel
+														rendered="#{solicitanteBean.pessoa eq 'JURIDICA'}"
+														class="control-label" value="CNPJ" />
+
+													<p:inputText id="cpf"
+														value="#{solicitanteBean.solicitante.cpf}"
+														rendered="#{solicitanteBean.pessoa eq 'FISICA'}"
+														styleClass="form-control">
+														<script>
+															$("#cpf").mask('000.000.000-00',{placeholder : "000.000.000-00",'translation' : { 0 : { pattern : /[0-9*]/ } } });
+
+															$("#cpf").click(function() {
+																				progressBar();
+																   }).change(function() {
+																			progressBar();
+																		});
+														</script>
+													</p:inputText>
+
+													<p:inputText id="cnpj"
+														value="#{solicitanteBean.solicitante.cnpj}"
+														rendered="#{solicitanteBean.pessoa eq 'JURIDICA'}"
+														styleClass="form-control">
+														<script>
+															$("#cnpj").mask( '000.000.000/0000-00',{ placeholder : "000.000.000/0000-00", 'translation' : { 0 : { pattern : /[0-9*]/} } });
+
+															$("#cnpj").click(function() {
+																				progressBar();
+																			}).change(function() {
+																				progressBar();
+																			});
+														</script>
+													</p:inputText>
+													<span style="display: none" class="help-block">Campo
+														obrigatório</span>
+
+													<p:selectOneRadio class="radio" var="pessoa"
+														value="#{solicitanteBean.pessoa}" unselectable="false">
+														<f:selectItem itemLabel="Pessoa Jurídica"
+															itemValue="JURIDICA"></f:selectItem>
+														<f:selectItem itemLabel="Pessoa Física" itemValue="FISICA"></f:selectItem>
+														<p:ajax event="valueChange" update="div-cpf"></p:ajax>
+													</p:selectOneRadio>
+
+												</div>
+											</h:panelGroup>
+											<div class="col-sm-6">
+												<p:outputLabel for="rg" class="control-label" value="RG" />
+												<p:inputText id="rg"
+													value="#{solicitanteBean.solicitante.rg}"
+													styleClass="form-control" placeholder="RG" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+
+										</h:panelGroup>
+									</div>
+								</div>
+							</div>
+
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<p class="box-title">Localização</p>
+								</div>
+								<div class="box-body">
+									<div class="container">
+										<h:panelGroup layout="block" id="div-cep" class="form-group">
+
+											<div class="col-sm-4">
+												<p:outputLabel for="cep" class="control-label" value="CEP" />
+												<p:inputText id="cep"
+													value="#{solicitanteBean.solicitante.cep}"
+													styleClass="form-control" placeholder="CEP" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+
+											<div class="col-sm-4">
+												<h:outputLabel for="bairro" class="control-label"
+													value="Bairro" />
+												<p:inputText id="bairro"
+													value="#{solicitanteBean.solicitante.bairro}"
+													styleClass="form-control" placeholder="Bairro" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+											<div class="col-sm-2">
+												<p:outputLabel for="numero" class="control-label"
+													value="Número" />
+												<p:inputText id="numero"
+													value="#{solicitanteBean.solicitante.numero}"
+													styleClass="form-control" placeholder="Número" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+										</h:panelGroup>
+
+										<h:panelGroup layout="block" id="div-endereco"
+											class="form-group">
+
+											<div class="col-sm-10">
+												<p:outputLabel for="endereco" class="control-label"
+													value="Endereço" />
+												<p:inputText id="endereco"
+													value="#{solicitanteBean.solicitante.endereco}"
+													styleClass="form-control" placeholder="Endereço" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+
+											</div>
+
+										</h:panelGroup>
+
+										<h:panelGroup id="div-minicipio" layout="block"
+											class="form-group">
+											<div class="col-sm-5">
+												<h:outputLabel for="municipio" class="control-label"
+													value="Município" />
+												<p:inputText id="municipio"
+													value="#{solicitanteBean.solicitante.municipio}"
+													styleClass="form-control" placeholder="Munícipio" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+											<!-- /.input group -->
+											<div class="col-sm-5">
+												<h:outputLabel for="distrito" class="control-label"
+													value="Distrito" />
+												<p:inputText id="distrito"
+													value="#{solicitanteBean.solicitante.distrito}"
+													styleClass="form-control" placeholder="Distrito" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+
+											</div>
+										</h:panelGroup>
+
+										<h:panelGroup layout="block" id="div-complemento"
+											class="form-group">
+
+											<div class="col-sm-10">
+												<p:outputLabel for="complemento" class="control-label"
+													value="Complemento" />
+												<p:inputText id="complemento"
+													value="#{solicitanteBean.solicitante.complemento}"
+													styleClass="form-control" placeholder="Complemento" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+
+											</div>
+										</h:panelGroup>
+									</div>
+								</div>
+							</div>
+
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<p class="box-title">Contato</p>
+								</div>
+								<div class="box-body">
+									<div class="container">
+										<h:panelGroup id="div-telefone" layout="block"
+											class="form-group">
+											<div class="col-sm-5">
+												<h:outputLabel for="telefone" class="control-label"
+													value="Telefone" />
+												<p:inputText id="telefone"
+													value="#{solicitanteBean.solicitante.telefone}"
+													styleClass="form-control" placeholder="Telefone" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+											<!-- /.input group -->
+
+											<div class="col-sm-5">
+												<h:outputLabel for="celular" class="control-label"
+													value="Celular" />
+												<p:inputText id="celular"
+													value="#{solicitanteBean.solicitante.celular}"
+													styleClass="form-control" placeholder="Celular" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+											</div>
+											<!-- /.input group -->
+										</h:panelGroup>
+
+										<h:panelGroup id="div-email" layout="block" class="form-group">
+
+											<div class="col-sm-10">
+												<h:outputLabel for="email" class="control-label"
+													value="Email" />
+												<p:inputText id="email"
+													value="#{solicitanteBean.solicitante.email}"
+													styleClass="form-control" placeholder="E-mail" />
+												<span style="display: none" class="help-block">Campo
+													obrigatório</span>
+
+											</div>
+											<!-- /.input group -->
+										</h:panelGroup>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<ul class="list-inline pull-right">
+						<p:commandButton value="Próximo"
+							action="#{solicitanteBean.proximo()}"
+							class="btn btn-default btn-info" />
+					</ul>
+				</div>
+				<div class="tab-pane" role="tabpanel" id="step2"
+					style="padding-top: 0px;">
+					<div class="box">
+						<div class="box-header">
+							<h3 class="box-title">Anexos</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body no-padding">
+							<table class="table table-striped">
+								<tr>
+									<th style="width: 10px">#</th>
+									<th>Descrição</th>
+									<th>Documento</th>
+									<th>Upload</th>
+								</tr>
+								<tr>
+									<td>1.</td>
+									<td>Análise Bacteriológica (para fonte ou poço)</td>
+									<td>
+										<div class="progress progress-xs">
+											<div class="progress-bar progress-bar-danger"
+												style="width: 55%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" />
+									<!-- <h:form enctype="multipart/form-data"> 
+									    <p:fileUpload value="#{solicitanteBean.file}" mode="simple" skinSimple="true" />
+									    <p:commandButton value="Submit" ajax="false" action="#{solicitanteBean.fileUpload}" disabled="false" />
+									</h:form> -->
+									</td>
+								</tr>
+								<tr>
+									<td>2.</td>
+									<td>Análise Físico - Química (para fonte ou poço)</td>
+									<td>
+										<div class="progress progress-xs">
+											<div class="progress-bar progress-bar-yellow"
+												style="width: 70%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>3.</td>
+									<td>ART de teste de vazão (para captação em poços)</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-primary"
+												style="width: 30%"></div>
+										</div>
+									</td>
+									<td><input value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>4.</td>
+									<td>Cadastro de Pessoa Física (caso pessoa jurídica
+										apresentar documento do representante legal)</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>5.</td>
+									<td>Carteira de Identidade (caso pessoa jurídica
+										apresentar documento do representante legal)</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>6.</td>
+									<td>Certidão de Regularidade de Outorga / Declaração de
+										Adimplência</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>7.</td>
+									<td>Comprovante de Residência</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>8.</td>
+									<td>DAE</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>9.</td>
+									<td>Documento de Dominialidade da Área de Captação e por
+										onde passará a tubulação (atualizado)</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar"  value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>10.</td>
+									<td>Memorial Descritivo do Projeto</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>11.</td>
+									<td>Outros Documentos</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+								<tr>
+									<td>12.</td>
+									<td>Perfíl Litológico Construtivo (para captação em poços)</td>
+									<td>
+										<div class="progress progress-xs progress-striped active">
+											<div class="progress-bar progress-bar-success"
+												style="width: 90%"></div>
+										</div>
+									</td>
+									<td><input name="Carregar" value="Carregar" type="file"
+										id="exampleInputFile" /></td>
+								</tr>
+							</table>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<ul class="list-inline pull-right">
+						<!-- <li><button type="button" class="btn btn-default prev-step">Anterior</button></li> -->
+						<p:commandButton value="Anterior"
+							class="btn btn-default prev-step"></p:commandButton>
+						<p:commandButton value="Próximo"
+							action="#{solicitanteBean.proximo()}"
+							class="btn btn-default btn-info next-step"></p:commandButton>
+					</ul>
+				</div>
+				<div class="tab-pane" role="tabpanel" id="step3">
+					<h3>Step three</h3>
+					<p>Third step</p>
+					<ul class="list-inline pull-right">
+						<p:commandButton value="Anterior"
+							class="btn btn-default prev-step"></p:commandButton>
+						<p:commandButton value="Próximo" update="confirmacao"
+							action="#{solicitanteBean.proximo()}"
+							class="btn btn-default btn-info next-step"></p:commandButton>
+					</ul>
+				</div>
+				<div class="tab-pane" role="tabpanel" id="complete">
+					<div class="box box-primary">
+						<div class="box-header">
+							<p class="box-title">Confirmação de dados</p>
+						</div>
+						<div class="box-body">
+							<div class="container">
+								<h:panelGroup id="confirmacao">
+									<div class="form-group">
+										<div class="col-sm-6">
+											<p:outputLabel class="control-label" value="Nome" />
+											<h:outputText value="#{solicitanteBean.solicitante.nome}"
+												styleClass="form-control" placeholder="Nome" />
+										</div>
+										<div class="col-sm-4">
+											<p:outputLabel rendered="#{solicitanteBean.pessoa eq 'FISICA'}"
+												class="control-label" value="CPF" />
+											<p:outputLabel
+												rendered="#{solicitanteBean.pessoa eq 'JURIDICA'}"
+												class="control-label" value="CNPJ" />
+			
+											<h:outputText value="#{solicitanteBean.solicitante.cpf}"
+												rendered="#{solicitanteBean.pessoa eq 'FISICA'}"
+												styleClass="form-control">
+											</h:outputText>
+			
+											<h:outputText value="#{solicitanteBean.solicitante.cnpj}"
+												rendered="#{solicitanteBean.pessoa eq 'JURIDICA'}"
+												styleClass="form-control">
+											</h:outputText>
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<div class="col-sm-6">
+											<p:outputLabel class="control-label" value="RG" />
+											<h:outputText value="#{solicitanteBean.solicitante.rg}"
+												styleClass="form-control" placeholder="RG" />
+										</div>
+										<div class="col-sm-4">
+											<p:outputLabel class="control-label" value="CEP" />
+											<h:outputText value="#{solicitanteBean.solicitante.cep}"
+												styleClass="form-control" placeholder="CEP" />
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<div class="col-sm-4">
+											<h:outputLabel class="control-label" value="Bairro" />
+											<h:outputText value="#{solicitanteBean.solicitante.bairro}"
+												styleClass="form-control" placeholder="Bairro" />			
+										</div>
+										<div class="col-sm-3">
+											<h:outputLabel class="control-label" value="Município" />
+											<h:outputText value="#{solicitanteBean.solicitante.municipio}"
+												styleClass="form-control" placeholder="Munícipio" />
+										</div>
+										<div class="col-sm-3">
+											<h:outputLabel class="control-label" value="Distrito" />
+											<h:outputText value="#{solicitanteBean.solicitante.distrito}"
+												styleClass="form-control" placeholder="Distrito" />
+										</div>
+		
+									</div>
+									
+									<div class="form-group">
+										
+										<div class="col-sm-7">
+											<p:outputLabel class="control-label" value="Endereço" />
+											<h:outputText value="#{solicitanteBean.solicitante.endereco}"
+												styleClass="form-control" placeholder="Endereço" />
+										</div>
+										<div class="col-sm-3">
+											<p:outputLabel class="control-label" value="Número" />
+											<h:outputText value="#{solicitanteBean.solicitante.numero}"
+												styleClass="form-control" placeholder="Número" />
+										</div>
+									
+									</div>
+									
+									<div class="form-group">
+										<div class="col-sm-10">
+											<p:outputLabel for="complemento" class="control-label"
+												value="Complemento" />
+											<h:outputText value="#{solicitanteBean.solicitante.complemento}"
+												styleClass="form-control" placeholder="Complemento" />
+										</div>
+									</div>
+									
+									<div class="form-group">
+										<div class="col-sm-5">
+											<h:outputLabel for="telefone" class="control-label"
+												value="Telefone" />
+											<h:outputText value="#{solicitanteBean.solicitante.telefone}"
+												styleClass="form-control" placeholder="Telefone" />
+										</div>
+										<div class="col-sm-5">
+											<h:outputLabel for="celular" class="control-label"
+												value="Celular" />
+											<h:outputText value="#{solicitanteBean.solicitante.celular}"
+												styleClass="form-control" placeholder="Celular" />
+										</div>
+		
+									</div>
+									<div class="form-group">
+										<div class="col-sm-10">
+											<h:outputLabel class="control-label" value="Email" />
+											<h:outputText value="#{solicitanteBean.solicitante.email}"
+												styleClass="form-control" placeholder="E-mail" />
+										</div>
+									</div>
+								</h:panelGroup>
+								
+								<object type="application/pdf" data=""></object>
+							</div>
+						</div>
+					</div>
+					<ul class="list-inline pull-right">
+						<p:commandButton value="Anterior"
+							class="btn btn-default prev-step"></p:commandButton>
+						<p:commandButton value="Completar"
+							action="#{solicitanteBean.salvar()}"
+							class="btn btn-primary btn-info-full next-step"></p:commandButton>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+
+			</div>
+			<!-- </h:form> -->
+		</div>
+	</ui:define>
+
+</ui:composition>
+
+</html>

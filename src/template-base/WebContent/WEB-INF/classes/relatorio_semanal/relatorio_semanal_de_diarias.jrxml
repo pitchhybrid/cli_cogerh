@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relat_plano_viagem2" language="groovy" pageWidth="1300" pageHeight="1191" orientation="Landscape" whenNoDataType="NoPages" columnWidth="1290" leftMargin="5" rightMargin="5" topMargin="0" bottomMargin="0" uuid="48e09c24-8a42-4f77-b4c9-991e4dcc8955">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<queryString>
+		<![CDATA[SELECT
+       diaria.dia_num_numero AS numero_diaria,
+       solic.sol_dsc_nome AS solicitante,
+       solic.sol_dsc_matricula AS matricula,
+       diaria.dia_dt_data_inicio_real AS dt_inicio,
+       diaria.dia_dt_data_fim_real AS dt_fim,
+       funcao.func_dsc_descricao AS cargo,
+       loc_origem.loc_dsc_descricao AS desc_loc_origem,
+       loc_destino.loc_dsc_descricao AS desc_loc_destino,
+       diaria.dia_num_qtd_diaria AS qtd_diarias,
+       diaria.dia_num_valor_diaria AS vlr_diaria,
+       diaria.dia_num_ajuda_custo AS ajuda_custo,
+       diaria.dia_num_valor_total_real AS vlr_total_real,
+       solic.sol_dsc_banco AS banco,
+       solic.sol_dsc_agencia AS agencia,
+       solic.sol_dsc_conta AS conta,
+       gerencia.ger_dsc_descricao AS gerencia
+
+FROM  adm_diarias.t_diaria_dia diaria,
+	  adm_diarias.t_solicitante_sol solic,
+	  adm_diarias.t_localidade_loc loc_origem,
+      adm_diarias.t_localidade_loc loc_destino,
+      adm_diarias.t_funcao_func funcao,
+      adm_diarias.t_gerencia_ger gerencia
+
+
+WHERE
+      diaria.solic_cod_id_fk = solic.sol_cod_id AND
+      diaria.loc_origem_cod_id_fk = loc_origem.loc_cod_id AND
+      diaria.loc_destino_cod_id_fk = loc_destino.loc_cod_id AND
+      solic.func_cod_id_fk = funcao.func_cod_id AND
+      diaria.ger_cod_id_fk = gerencia.ger_cod_id AND
+      diaria.dia_num_status = 6 AND
+      diaria.dia_byte_doc_viagem IS NOT NULL]]>
+	</queryString>
+	<field name="numeroDiaria" class="java.lang.Integer"/>
+	<field name="solicitante" class="java.lang.String"/>
+	<field name="matricula" class="java.lang.String"/>
+	<field name="dataSolicitacao" class="java.util.Date"/>
+	<field name="cargo" class="java.lang.String"/>
+	<field name="localidadeOrigem" class="java.lang.String"/>
+	<field name="localidadeDestino" class="java.lang.String"/>
+	<field name="gerencia" class="java.lang.String"/>
+	<field name="status" class="java.lang.Integer"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="ElementGroupHeight" x="0" y="0" width="305" height="54" uuid="174dfefb-8bd3-4a44-b7f2-b33677899757">
+					<property name="com.jaspersoft.layout.grid.x" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.y" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.weight.x" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.weight.y" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.rowspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.colspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.weight.fixed" value="true"/>
+				</reportElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="0" width="295" height="54" uuid="7e4063fe-cf50-4abe-ba7b-3568e9fb2ec5">
+					<property name="com.jaspersoft.layout.grid.x" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.y" value="0"/>
+					<property name="com.jaspersoft.layout.grid.weight.x" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.weight.y" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.rowspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.colspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.weight.fixed" value="true"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Black" size="11" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Relatório semanal de Diárias Pendentes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="0" width="530" height="54" uuid="2fc5e6f0-6af2-4466-89f9-555174a13b31">
+					<property name="com.jaspersoft.layout.grid.x" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.y" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.weight.x" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.weight.y" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.rowspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.colspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.weight.fixed" value="true"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Emissão:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="1130" y="0" width="160" height="54" uuid="9cd25f6a-91b2-4201-9d53-e6b1afeb527e">
+					<property name="com.jaspersoft.layout.grid.x" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.y" value="-1"/>
+					<property name="com.jaspersoft.layout.grid.weight.x" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.weight.y" value="1.0"/>
+					<property name="com.jaspersoft.layout.grid.rowspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.colspan" value="1"/>
+					<property name="com.jaspersoft.layout.grid.weight.fixed" value="true"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="60" height="18" backcolor="#99C4FF" uuid="8eeae319-fcda-4b63-933d-d863f09efe16"/>
+				<box padding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Nº Diária]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="59" y="0" width="246" height="18" backcolor="#99C4FF" uuid="6d7fb5fd-1b64-4b12-882f-9f2773c64bda"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Solicitante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="305" y="0" width="57" height="18" backcolor="#99C4FF" uuid="ca13fed5-5a71-4b10-823d-dadb82ce8526"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Matricula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="362" y="0" width="195" height="18" backcolor="#99C4FF" uuid="b5df8031-1684-4457-9dd6-a199aa12d522"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="557" y="0" width="140" height="18" backcolor="#99C4FF" uuid="ab5ca950-17a4-4fb3-b8b8-c205b4588535"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Origem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="697" y="0" width="140" height="18" backcolor="#99C4FF" uuid="41017a8a-bd9f-49b7-95ab-9f5de5bb75d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="837" y="0" width="97" height="18" backcolor="#99C4FF" uuid="d8fd2564-4e05-4ea5-8e65-4cc682e31e79"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Data Solicitação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1070" y="0" width="220" height="18" backcolor="#99C4FF" uuid="ec28b166-ce90-4d0d-acde-b15a2121f5a9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Gerência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="934" y="0" width="136" height="18" backcolor="#99C4FF" uuid="fdf9c649-9dc9-4e68-b615-3632157097ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="59" height="18" uuid="97340194-7664-4ce2-ae11-dea435f43d27"/>
+				<box padding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroDiaria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="59" y="0" width="246" height="18" uuid="737390b5-9421-42ed-a470-acc638efafb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solicitante}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="305" y="0" width="57" height="18" uuid="c7ba13e4-56a3-4743-9604-bbd833c665b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="557" y="0" width="140" height="18" uuid="94e2e20d-414a-457c-b74f-a74eb50ece34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{localidadeOrigem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="697" y="0" width="140" height="18" uuid="7065f11f-0b28-4781-9267-70b4ff689901"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{localidadeDestino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="195" height="18" uuid="85587526-7a5f-4bb3-a1db-01449f613448"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cargo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="837" y="0" width="97" height="18" uuid="8380a688-9188-4132-9d5d-4479a2127bb5"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataSolicitacao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1070" y="0" width="220" height="18" uuid="4f4abea5-276c-4296-83b2-436a59275403"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gerencia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="934" y="0" width="136" height="18" uuid="79720bae-fa20-4310-b46f-9d5cca3d9a22"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status} == 1 ? "Aguardando Aprovação nível 1":
+	$F{status} == 2 ? "Aguardando aprovação nível 2":
+		$F{status} == 3 ? "Aguardando prestação de contas":
+			$F{status} == 4 ? "Diária rejeitada":
+				$F{status} == 5 ? "Diária realizada e não realizada":
+					$F{status} == 6 ? "Diária encerrada e não realizada":"";]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="18"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

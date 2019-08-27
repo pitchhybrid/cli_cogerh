@@ -1,0 +1,11 @@
+.inputField {
+   width: 350px !important;
+}
+
+.label-required {
+	color:red;
+}
+
+.describle-report{
+	margin-top:25px;
+}
