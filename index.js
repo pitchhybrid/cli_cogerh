@@ -16,7 +16,6 @@ module.exports = function cli(argv){
         if(novo) {
                
             if(novo[0] == "projeto" || novo[0] == "p"){
-                console.log(novo)
                 let questions = [
                     {
                       type: 'input',
@@ -59,17 +58,21 @@ module.exports = function cli(argv){
                 });
                   
             }else if(novo[0] == "componente" || novo[0] == "c"){
-                var json = util.getJson("package")
-                projeto.pacote = json.nome_pacote
-                projeto.gerarComponente(novo[1],novo[2] || "all")
+                util.getJson("package").then(function (json){
+                    projeto.pacote = json.nome_pacote
+                    projeto.gerarComponente(novo[1],novo[2] || "all")
+                })
+                
             }else{
                 console.log( ajuda.novo.all())
             }
         }else if(deletar){
             if (deletar[0] == "componente" || deletar[0] == "c"){
-                var json = util.getJson("package")
-                projeto.pacote = json.nome_pacote
-                projeto.deletarComponente(deletar[1], deletar[2] || "all")
+                util.getJson("package").then(function(json){
+                    projeto.pacote = json.nome_pacote
+                    projeto.deletarComponente(deletar[1], deletar[2] || "all")
+                })
+                
             }else{
                 console.log( ajuda.deletar.all())
             }

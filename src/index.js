@@ -32,7 +32,7 @@ module.exports = class Index{
 
         setTimeout(function(){
         
-            glob("**/*.java", function (er, files) {
+            glob(path + "/**/*.java", function (er, files) {
                 for(i of files){
                     util.replaceInFile(i,"br.com.cogerh.template",pac)
                     console.log(`Criado: ["${i}"]`)

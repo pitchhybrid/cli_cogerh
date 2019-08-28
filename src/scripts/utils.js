@@ -75,7 +75,7 @@ util.writeFile = function ( dado, nome ){
      })
 }
 
-util.getJson = function ( json ){
+util.getJson = async function ( json ){
     return require( this.base_path( `${json}.json` ) )
 }
 
