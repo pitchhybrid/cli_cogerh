@@ -1,2 +1,3 @@
 @echo off
-node ./cmd.js %*
+
+node %userprofile%\Desktop\cli_cogerh\bin\cmd.js %*
